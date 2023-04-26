@@ -5,7 +5,7 @@
 
 #include "handle_error.h"
 
-#define N (1lu << 28)
+#define N (1lu << 18)
 
 unsigned long omp_get_thread_num_wrapper(void) {
   return (unsigned long)omp_get_thread_num();
