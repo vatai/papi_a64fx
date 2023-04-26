@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
     chk(PAPI_add_named_event(event_set, event_str), "Couldn't add event.");
     chk(PAPI_start(event_set), "Coulnd't start event set.");
     a[i] = a[i] * b[i] + c[i];
-    chk(PAPI_stop(event_set, *values[i]), "Couldn't stop event set.");
+    chk(PAPI_stop(event_set, &values[i]), "Couldn't stop event set.");
   }
   printf("Time: %lf\n", omp_get_wtime() - now);
   // END WORK
