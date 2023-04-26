@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
   chk(PAPI_query_event(native), "zero not an event!");
 
   //
+  //
 
 #pragma omp parallel for
   for (int i = 0; i < N; i++) {
