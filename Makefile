@@ -1,7 +1,11 @@
 CC=fcc
 CFLAGS=-Kopenmp -Kfast
+
 # CC=clang
 # CFLAGS=-O2 -fopenmp
+
 LDLIBS=-lpapi -fopenmp
-main: handle_error.o main.o
-events1: events1.o handle_error.o
+
+all: triad triad.multi
+triad: triad.o handle_error.o
+triad.multi: triad.multi.o handle_error.o
