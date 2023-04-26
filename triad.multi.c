@@ -7,7 +7,7 @@
 
 #define N (1lu << 28)
 
-int main() {
+int main(int argc, char *argv[]) {
   double a[N], b[N], c[N];
   int retval;
   int native = 0x0;
@@ -16,6 +16,7 @@ int main() {
   int num_threads = omp_get_max_threads();
   long long *values = malloc(num_threads * sizeof(*values));
 
+  printf("Start: %s\n", argv[0]);
   retval = PAPI_library_init(PAPI_VER_CURRENT);
   if (retval != PAPI_VER_CURRENT) {
     fprintf(stderr, "PAPI library init error!\n");

@@ -7,14 +7,16 @@
 
 #define N (1lu << 28)
 
-int main() {
+int main(int argc, char *argv[]) {
   double a[N], b[N], c[N];
   int retval;
   int native = 0x0;
   int event_set = PAPI_NULL;
-  long long values = 0;
   char event_str[PAPI_MAX_STR_LEN] = "FP_SCALE_OPS_SPEC";
 
+  long long values = 0;
+
+  printf("Start: %s\n", argv[0]);
   retval = PAPI_library_init(PAPI_VER_CURRENT);
   if (retval != PAPI_VER_CURRENT) {
     fprintf(stderr, "PAPI library init error!\n");
@@ -22,6 +24,8 @@ int main() {
   }
   chk(PAPI_event_name_to_code(event_str, &native), "name to code failed");
   chk(PAPI_query_event(native), "zero not an event!");
+
+  //
 
 #pragma omp parallel for
   for (int i = 0; i < N; i++) {
@@ -35,6 +39,7 @@ int main() {
   chk(PAPI_create_eventset(&event_set), "Couldn't create eventset.");
   chk(PAPI_add_event(event_set, native), "Couldn't add event.");
   chk(PAPI_start(event_set), "Coulnd't start event set.");
+
 #pragma omp parallel for
   for (int i = 0; i < N; i++) {
     a[i] = a[i] * b[i] + c[i];
@@ -51,6 +56,7 @@ int main() {
   printf("counter: %lld\n", values);
   printf("result: %f\n", sum);
 
+  //
   printf("DONE!\n");
   return 0;
 }
