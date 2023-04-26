@@ -40,7 +40,6 @@ int main(int argc, char *argv[]) {
   chk(PAPI_create_eventset(&event_set), "Couldn't create eventset.");
   chk(PAPI_add_event(event_set, native), "Couldn't add event.");
   chk(PAPI_start(event_set), "Coulnd't start event set.");
-
 #pragma omp parallel for
   for (int i = 0; i < N; i++) {
     a[i] = a[i] * b[i] + c[i];
