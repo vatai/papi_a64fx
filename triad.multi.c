@@ -40,7 +40,8 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < N; i++) {
     int event_set = PAPI_NULL;
     chk(PAPI_create_eventset(&event_set), "Couldn't create eventset.");
-    chk(PAPI_add_named_event(event_set, event_str), "Couldn't add event.");
+    chk(PAPI_add_named_event(event_set, "FP_SCALE_OPS_SPEC"),
+        "Couldn't add event.");
     chk(PAPI_start(event_set), "Coulnd't start event set.");
     a[i] = a[i] * b[i] + c[i];
     size_t tid = omp_get_thread_num();
