@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
   int num_threads = omp_get_max_threads();
   long long *values = malloc(num_threads * sizeof(*values));
 
-  printf("Start: %s\n", argv[0]);
+  printf("Start: %s (num_threads: %d)\n", argv[0], num_threads);
   retval = PAPI_library_init(PAPI_VER_CURRENT);
   if (retval != PAPI_VER_CURRENT) {
     fprintf(stderr, "PAPI library init error!\n");
