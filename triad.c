@@ -11,7 +11,6 @@ int main(int argc, char *argv[]) {
   double a[N], b[N], c[N];
   int retval;
   int native = 0x0;
-  int event_set = PAPI_NULL;
   char event_str[PAPI_MAX_STR_LEN] = "FP_SCALE_OPS_SPEC";
 
   long long values = 0;
@@ -35,6 +34,7 @@ int main(int argc, char *argv[]) {
   }
 
   // BEGIN WORK
+  int event_set = PAPI_NULL;
   double now = omp_get_wtime();
   chk(PAPI_create_eventset(&event_set), "Couldn't create eventset.");
   chk(PAPI_add_event(event_set, native), "Couldn't add event.");

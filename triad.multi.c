@@ -11,7 +11,6 @@ int main(int argc, char *argv[]) {
   double a[N], b[N], c[N];
   int retval;
   int native = 0x0;
-  int event_set = PAPI_NULL;
   char event_str[PAPI_MAX_STR_LEN] = "FP_SCALE_OPS_SPEC";
   int num_threads = omp_get_max_threads();
   long long *values = malloc(num_threads * sizeof(*values));
@@ -38,6 +37,7 @@ int main(int argc, char *argv[]) {
   double now = omp_get_wtime();
 #pragma omp parallel for
   for (int i = 0; i < N; i++) {
+    int event_set = PAPI_NULL;
     chk(PAPI_create_eventset(&event_set), "Couldn't create eventset.");
     chk(PAPI_add_event(event_set, native), "Couldn't add event.");
     chk(PAPI_start(event_set), "Coulnd't start event set.");
