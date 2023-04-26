@@ -58,6 +58,6 @@ int main(int argc, char *argv[]) {
   printf("result: %f\n", sum);
 
   free(values);
-  printf("DONE!\n");
+  printf("DONE!\n\n");
   return 0;
 }

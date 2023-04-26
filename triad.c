@@ -57,6 +57,6 @@ int main(int argc, char *argv[]) {
   printf("result: %f\n", sum);
 
   //
-  printf("DONE!\n");
+  printf("DONE!\n\n");
   return 0;
 }
