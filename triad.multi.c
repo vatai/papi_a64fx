@@ -12,8 +12,9 @@ int main() {
   int retval;
   int native = 0x0;
   int event_set = PAPI_NULL;
-  long long values = 0;
   char event_str[PAPI_MAX_STR_LEN] = "FP_SCALE_OPS_SPEC";
+  int num_threads = omp_get_max_threads();
+  long long *values = malloc(num_threads * sizeof(*values));
 
   retval = PAPI_library_init(PAPI_VER_CURRENT);
   if (retval != PAPI_VER_CURRENT) {
@@ -22,10 +23,8 @@ int main() {
   }
   chk(PAPI_event_name_to_code(event_str, &native), "name to code failed");
   chk(PAPI_query_event(native), "zero not an event!");
-  chk(PAPI_create_eventset(&event_set), "Couldn't create event.");
-  chk(PAPI_add_event(event_set, native), "Couldn't add event.");
 
-  chk(PAPI_start(event_set), "Coulnd't start event set.");
+  chk(PAPI_thread_init(omp_get_thread_num));
 
 #pragma omp parallel for
   for (int i = 0; i < N; i++) {
@@ -33,21 +32,30 @@ int main() {
     b[i] = (3 * i + 2) % 29;
     c[i] = (5 * i + 1) % 13;
   }
+
+  // BEGIN WORK
   double now = omp_get_wtime();
 #pragma omp parallel for
   for (int i = 0; i < N; i++) {
+    chk(PAPI_create_eventset(&event_set), "Couldn't create event.");
+    chk(PAPI_add_event(event_set, native), "Couldn't add event.");
+    chk(PAPI_start(event_set), "Coulnd't start event set.");
     a[i] = a[i] * b[i] + c[i];
+    size_t tid = omp_get_thread_num();
+    chk(PAPI_stop(event_set, values + tid), "Couldn't stop event set.");
   }
   printf("Time: %lf\n", omp_get_wtime() - now);
+  // END WORK
+
   double sum = 0;
   for (int i = 0; i < N; i++) {
     sum += a[i];
   }
 
-  chk(PAPI_stop(event_set, &values), "Couldn't stop event set.");
   printf("counter: %lld\n", values);
   printf("result: %f\n", sum);
 
+  free(values);
   printf("DONE!\n");
   return 0;
 }
