@@ -1,16 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <papi.h>
+#include <omp.h>
 
 void handle_error (int retval);
 
 #define chk(X, msg) { retval = X; if (retval != PAPI_OK) { fprintf(stderr, "%s\n", msg); handle_error(retval); } }
-#define N 100
+#define N (1lu << 28)
 
 double work() {
   double a[N], b[N], c[N];
+  #pragma omp parallel for
   for (int i = 0; i < N; i++) { a[i] = (i+3) % 11; b[i] = (3*i +2) % 29; c[i] = (5*i+1) % 13; }
+  double now = omp_get_wtime();
+  #pragma omp parallel for
   for (int i = 0; i < N; i++) { a[i] = a[i] * b[i] + c[i]; }
+  printf("Time: %lf\n", omp_get_wtime() - now);
   double sum = 0;
   for (int i = 0; i < N; i++) { sum += a[i]; }
   return sum;
