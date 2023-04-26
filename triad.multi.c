@@ -7,6 +7,10 @@
 
 #define N (1lu << 28)
 
+unsigned long omp_get_thread_num_wrapper(void) {
+  return (unsigned long)omp_get_thread_num();
+}
+
 int main(int argc, char *argv[]) {
   double a[N], b[N], c[N];
   int retval;
@@ -24,7 +28,7 @@ int main(int argc, char *argv[]) {
   // chk(PAPI_event_name_to_code(event_str, &native), "name to code failed");
   // chk(PAPI_query_event(native), "zero not an event!");
 
-  chk(PAPI_thread_init((unsigned long (*)(void))omp_get_thread_num),
+  chk(PAPI_thread_init(omp_get_thread_num_wrapper),
       "PAPI_thread_init() failed.\n");
 
 #pragma omp parallel for
