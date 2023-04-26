@@ -24,7 +24,8 @@ int main(int argc, char *argv[]) {
   // chk(PAPI_event_name_to_code(event_str, &native), "name to code failed");
   // chk(PAPI_query_event(native), "zero not an event!");
 
-  chk(PAPI_thread_init(omp_get_thread_num), "PAPI_thread_init() failed.\n");
+  chk(PAPI_thread_init((unsigned long (*)(void))omp_get_thread_num),
+      "PAPI_thread_init() failed.\n");
 
 #pragma omp parallel for
   for (int i = 0; i < N; i++) {
