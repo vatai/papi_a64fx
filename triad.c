@@ -32,7 +32,7 @@ int main() {
 
   // BEGIN WORK
   double now = omp_get_wtime();
-  chk(PAPI_create_eventset(&event_set), "Couldn't create event.");
+  chk(PAPI_create_eventset(&event_set), "Couldn't create eventset.");
   chk(PAPI_add_event(event_set, native), "Couldn't add event.");
   chk(PAPI_start(event_set), "Coulnd't start event set.");
 #pragma omp parallel for
