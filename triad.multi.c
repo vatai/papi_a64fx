@@ -10,7 +10,7 @@
 int main(int argc, char *argv[]) {
   double a[N], b[N], c[N];
   int retval;
-  int native = 0x0;
+  // int native = 0x0;
   char event_str[PAPI_MAX_STR_LEN] = "FP_SCALE_OPS_SPEC";
   int num_threads = omp_get_max_threads();
   long long *values = malloc(num_threads * sizeof(*values));
@@ -21,8 +21,8 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "PAPI library init error!\n");
     exit(1);
   }
-  chk(PAPI_event_name_to_code(event_str, &native), "name to code failed");
-  chk(PAPI_query_event(native), "zero not an event!");
+  // chk(PAPI_event_name_to_code(event_str, &native), "name to code failed");
+  // chk(PAPI_query_event(native), "zero not an event!");
 
   chk(PAPI_thread_init(omp_get_thread_num), "PAPI_thread_init() failed.\n");
 
@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < N; i++) {
     int event_set = PAPI_NULL;
     chk(PAPI_create_eventset(&event_set), "Couldn't create eventset.");
-    chk(PAPI_add_event(event_set, native), "Couldn't add event.");
+    chk(PAPI_add_named_event(event_set, event_str), "Couldn't add event.");
     chk(PAPI_start(event_set), "Coulnd't start event set.");
     a[i] = a[i] * b[i] + c[i];
     size_t tid = omp_get_thread_num();
