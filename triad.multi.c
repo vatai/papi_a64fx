@@ -15,7 +15,8 @@ int main(int argc, char *argv[]) {
   double a[N], b[N], c[N];
   int retval;
   // int native = 0x0;
-  char event_str[PAPI_MAX_STR_LEN] = "FP_SCALE_OPS_SPEC";
+  // char event_str[PAPI_MAX_STR_LEN] = "FP_SCALE_OPS_SPEC";
+  char event_str[PAPI_MAX_STR_LEN] = "PAPI_TOT_CYC";
   int num_threads = omp_get_max_threads();
   long long *values = malloc(num_threads * sizeof(long long));
 
