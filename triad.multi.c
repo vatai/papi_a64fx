@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
     printf("counter[%d]: %lld\n", i, values[i]);
     total_values += values[i];
   }
-  printf("total_counter: %lld\n", values[i]);
+  printf("total_counter: %lld\n", total_values);
   printf("result: %f\n", sum);
 
   free(values);
