@@ -2,6 +2,7 @@
 #include <papi.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "config.h"
 #include "handle_error.h"
@@ -38,18 +39,23 @@ int main(int argc, char *argv[]) {
 
   // BEGIN WORK
   double now = omp_get_wtime();
+  int *event_set = malloc(num_threads * sizeof(int));
 #pragma omp parallel
   {
-    int event_set = PAPI_NULL;
-    chk(PAPI_create_eventset(&event_set), "Couldn't create eventset.");
-    chk(PAPI_add_named_event(event_set, event_str), "Couldn't add event.");
-    chk(PAPI_start(event_set), "Coulnd't start event set.");
-#pragma omp for
-    for (int i = 0; i < N; i++) {
-      a[i] = a[i] * b[i] + c[i];
-    }
     int tid = omp_get_thread_num_wrapper();
-    chk(PAPI_stop(event_set, &values[tid]), "Couldn't stop event set.");
+    event_set[tid] = PAPI_NULL;
+    chk(PAPI_create_eventset(&event_set[tid]), "Couldn't create eventset.");
+    chk(PAPI_add_named_event(event_set[tid], event_str), "Couldn't add event.");
+    chk(PAPI_start(event_set[tid]), "Coulnd't start event set.");
+  }
+#pragma omp parallel for
+  for (int i = 0; i < N; i++) {
+    a[i] = a[i] * b[i] + c[i];
+  }
+#pragma omp parallel
+  {
+    int tid = omp_get_thread_num_wrapper();
+    chk(PAPI_stop(event_set[tid], &values[tid]), "Couldn't stop event set.");
   }
   printf("Time: %lf\n", omp_get_wtime() - now);
   // END WORK
