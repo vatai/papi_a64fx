@@ -50,7 +50,8 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < N; i++) {
       a[i] = a[i] * b[i] + c[i];
     }
-    chk(PAPI_stop(event_set, &values[i]), "Couldn't stop event set.");
+    int tid = omp_get_thread_num_wrapper();
+    chk(PAPI_stop(event_set, &values[tid]), "Couldn't stop event set.");
   }
   printf("Time: %lf\n", omp_get_wtime() - now);
   // END WORK
