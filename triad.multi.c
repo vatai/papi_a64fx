@@ -49,12 +49,12 @@ int main(int argc, char *argv[]) {
     chk(PAPI_add_named_event(event_set[tid], event_str), "Couldn't add event.");
     chk(PAPI_start(event_set[tid]), "Coulnd't start event set.");
   }
-  usleep(1000);
+  usleep(1000000);
 #pragma omp parallel for
   for (int i = 0; i < N; i++) {
     a[i] = a[i] * b[i] + c[i];
   }
-  usleep(1000);
+  usleep(1000000);
 #pragma omp parallel
   {
     int tid = omp_get_thread_num_wrapper();
