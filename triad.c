@@ -3,9 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "config.h"
 #include "handle_error.h"
-
-#define N (1lu << 28)
 
 //
 //
@@ -15,7 +14,6 @@ int main(int argc, char *argv[]) {
   double a[N], b[N], c[N];
   int retval;
   int native = 0x0;
-  char event_str[PAPI_MAX_STR_LEN] = "FP_SCALE_OPS_SPEC";
 
   long long values = 0;
 
