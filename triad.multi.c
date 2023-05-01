@@ -90,13 +90,16 @@ int main(int argc, char *argv[]) {
     sum += a[i];
   }
 
-  long long total_values = 0;
-  for (int tid = 0; tid < num_threads; tid++) {
-    for (int eid = 0; eid < NUM_EVENTS; eid++) {
-      total_values += values[tid][eid];
+  long long total_values[NUM_EVENTS];
+  for (int eid = 0; eid < NUM_EVENTS; eid++) {
+    total_values[eid] = 0;
+    for (int tid = 0; tid < num_threads; tid++) {
+      total_values[eid] += values[tid][eid];
     }
   }
-  printf("total_counter: %lld\n", total_values);
+  for (int eid = 0; eid < NUM_EVENTS; eid++) {
+    printf("%s: %lld\n", event_str[eid], total_values);
+  }
   printf("result: %f\n", sum);
 
   free_values(values, num_threads);

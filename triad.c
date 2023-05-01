@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < N; i++) {
     a[i] = a[i] * b[i] + c[i];
   }
-  chk(PAPI_stop(event_set, &values), "Couldn't stop event set.");
+  chk(PAPI_stop(event_set, values), "Couldn't stop event set.");
   printf("Time: %lf\n", omp_get_wtime() - now);
   // END WORK
 
@@ -52,7 +52,9 @@ int main(int argc, char *argv[]) {
     sum += a[i];
   }
 
-  printf("counter: %lld\n", values);
+  for (int eid = 0; eid < NUM_EVENTS; eid++) {
+    printf("%s: %lld\n", event_str[eid], values[eid]);
+  }
   printf("result: %f\n", sum);
 
   //
