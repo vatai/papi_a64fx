@@ -29,7 +29,6 @@ int main(int argc, char *argv[]) {
   int event_set = PAPI_NULL;
   chk(PAPI_create_eventset(&event_set), "Couldn't create eventset.");
   chk(PAPI_add_event(event_set, native), "Couldn't add event.");
-  chk(PAPI_start(event_set), "Coulnd't start event set.");
 #pragma omp parallel for
   for (int i = 0; i < N; i++) {
     a[i] = (i + 3) % 11;
@@ -38,6 +37,7 @@ int main(int argc, char *argv[]) {
   }
 
   // BEGIN WORK
+  chk(PAPI_start(event_set), "Coulnd't start event set.");
   double now = omp_get_wtime();
 #pragma omp parallel for
   for (int i = 0; i < N; i++) {
@@ -56,8 +56,6 @@ int main(int argc, char *argv[]) {
     printf("%s: %lld\n", event_str[eid], values[eid]);
   }
   printf("result: %f\n", sum);
-
-  //
   printf("DONE!\n\n");
   return 0;
 }
