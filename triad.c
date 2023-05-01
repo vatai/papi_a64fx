@@ -27,14 +27,15 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "PAPI library init error!\n");
     exit(1);
   }
-  for (int eid = 0; eid < NUM_EVENTS; eid++)
+  for (int eid = 0; eid < NUM_EVENTS; eid++) {
     chk(PAPI_event_name_to_code(event_str[eid], &native),
         "name to code failed");
-  chk(PAPI_query_event(native), "zero not an event!");
+    chk(PAPI_query_event(native), "zero not an event!");
 
-  int event_set = PAPI_NULL;
-  chk(PAPI_create_eventset(&event_set), "Couldn't create eventset.");
-  chk(PAPI_add_event(event_set, native), "Couldn't add event.");
+    int event_set = PAPI_NULL;
+    chk(PAPI_create_eventset(&event_set), "Couldn't create eventset.");
+    chk(PAPI_add_event(event_set, native), "Couldn't add event.");
+  }
 
   // BEGIN WORK
   chk(PAPI_start(event_set), "Coulnd't start event set.");
