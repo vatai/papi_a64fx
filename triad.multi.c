@@ -25,8 +25,8 @@ long long **alloc_values(size_t num_threads, size_t num_events) {
 void free_values(long long **values, size_t num_threads) {
   for (size_t tid = 0; tid < num_threads; tid++) {
     free(values[tid]);
-    free(values);
   }
+  free(values);
 }
 
 int main(int argc, char *argv[]) {
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
   {
     int tid = omp_get_thread_num_wrapper();
     cntvct[tid] = PAPI_get_virt_cyc();
-    chk(PAPI_stop(event_set[tid], &values[tid]), "Couldn't stop event set.");
+    chk(PAPI_stop(event_set[tid], values[tid]), "Couldn't stop event set.");
   }
   printf("Time: %lf\n", omp_get_wtime() - now);
   // END WORK
