@@ -6,10 +6,6 @@
 #include "config.h"
 #include "handle_error.h"
 
-//
-//
-//
-
 int main(int argc, char *argv[]) {
   double a[N], b[N], c[N];
   int retval;
@@ -23,11 +19,10 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "PAPI library init error!\n");
     exit(1);
   }
-  chk(PAPI_event_name_to_code(event_str, &native), "name to code failed");
+  for (int eid = 0; eid < NUM_EVENTS; eid++)
+    chk(PAPI_event_name_to_code(event_str[eid], &native),
+        "name to code failed");
   chk(PAPI_query_event(native), "zero not an event!");
-
-  //
-  //
 
   int event_set = PAPI_NULL;
   chk(PAPI_create_eventset(&event_set), "Couldn't create eventset.");

@@ -15,7 +15,7 @@ unsigned long omp_get_thread_num_wrapper(void) {
 int main(int argc, char *argv[]) {
   double a[N], b[N], c[N];
   int retval;
-  // int native = 0x0;
+  int native = 0x0;
   int num_threads = omp_get_max_threads();
   long long *values = malloc(num_threads * sizeof(long long));
 
@@ -25,8 +25,10 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "PAPI library init error!\n");
     exit(1);
   }
-  // chk(PAPI_event_name_to_code(event_str, &native), "name to code failed");
-  // chk(PAPI_query_event(native), "zero not an event!");
+  for (int eid = 0; eid < NUM_EVENTS; eid++)
+    chk(PAPI_event_name_to_code(event_str[eid], &native),
+        "name to code failed");
+  chk(PAPI_query_event(native), "zero not an event!");
 
   chk(PAPI_thread_init(omp_get_thread_num_wrapper),
       "PAPI_thread_init() failed.\n");
@@ -47,7 +49,9 @@ int main(int argc, char *argv[]) {
     int tid = omp_get_thread_num_wrapper();
     event_set[tid] = PAPI_NULL;
     chk(PAPI_create_eventset(&event_set[tid]), "Couldn't create eventset.");
-    chk(PAPI_add_named_event(event_set[tid], event_str), "Couldn't add event.");
+    for (int eid = 0; eid < NUM_EVENTS; eid++)
+      chk(PAPI_add_named_event(event_set[tid], event_str[eid]),
+          "Couldn't add event.");
     chk(PAPI_start(event_set[tid]), "Coulnd't start event set.");
     cntvct[tid] = PAPI_get_virt_cyc();
   }
