@@ -41,6 +41,7 @@ int main(int argc, char *argv[]) {
   // BEGIN WORK
   double now = omp_get_wtime();
   int *event_set = malloc(num_threads * sizeof(int));
+  long long *cntvct = malloc(num_threads * sizeof(long long));
 #pragma omp parallel
   {
     int tid = omp_get_thread_num_wrapper();
@@ -48,6 +49,7 @@ int main(int argc, char *argv[]) {
     chk(PAPI_create_eventset(&event_set[tid]), "Couldn't create eventset.");
     chk(PAPI_add_named_event(event_set[tid], event_str), "Couldn't add event.");
     chk(PAPI_start(event_set[tid]), "Coulnd't start event set.");
+    cntvct[tid] = PAPI_get_virt_cyc();
   }
   usleep(1000000);
 #pragma omp parallel for
@@ -57,6 +59,7 @@ int main(int argc, char *argv[]) {
   usleep(1000000);
 #pragma omp parallel
   {
+    cntvct[tid] = PAPI_get_virt_cyc();
     int tid = omp_get_thread_num_wrapper();
     chk(PAPI_stop(event_set[tid], &values[tid]), "Couldn't stop event set.");
   }
