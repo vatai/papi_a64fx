@@ -12,13 +12,22 @@ unsigned long omp_get_thread_num_wrapper(void) {
   return (unsigned long)omp_get_thread_num();
 }
 
+long long **alloc_values(size_t num_threads, size_t num_events) {
+  long long **values = malloc(num_threads * sizeof(long long *));
+  for (int tid = 0; tid < num_threads; tid++) {
+    values[tid] = malloc(num_events * sizeof(long long));
+    for (int eid = 0; eid < num_events; eid++)
+      values[tid][eid] = 0;
+  }
+  return values;
+}
+
 int main(int argc, char *argv[]) {
   double a[N], b[N], c[N];
   int retval;
   int native = 0x0;
   int num_threads = omp_get_max_threads();
-  long long *values = malloc(num_threads * sizeof(long long));
-
+  long long **values = alloc_values(num_threads, NUM_EVENTS);
   printf("Start: %s (num_threads: %d)\n", argv[0], num_threads);
   retval = PAPI_library_init(PAPI_VER_CURRENT);
   if (retval != PAPI_VER_CURRENT) {

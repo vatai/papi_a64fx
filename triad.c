@@ -11,7 +11,9 @@ int main(int argc, char *argv[]) {
   int retval;
   int native = 0x0;
 
-  long long values = 0;
+  long long values[NUM_EVENTS];
+  for (int eid = 0; eid < NUM_EVENTS; eid++)
+    values[eid] = 0;
 
   printf("Start: %s\n", argv[0]);
   retval = PAPI_library_init(PAPI_VER_CURRENT);
