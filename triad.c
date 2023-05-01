@@ -10,6 +10,7 @@ int main(int argc, char *argv[]) {
   double a[N], b[N], c[N];
   int retval;
   int native = 0x0;
+  long long cntvct;
 
   long long values[NUM_EVENTS];
   for (int eid = 0; eid < NUM_EVENTS; eid++)
@@ -38,11 +39,13 @@ int main(int argc, char *argv[]) {
 
   // BEGIN WORK
   chk(PAPI_start(event_set), "Coulnd't start event set.");
+  cntvct = PAPI_get_virt_cyc();
   double now = omp_get_wtime();
 #pragma omp parallel for
   for (int i = 0; i < N; i++) {
     a[i] = a[i] * b[i] + c[i];
   }
+  cntvct = PAPI_get_virt_cyc() - cntvct;
   chk(PAPI_stop(event_set, values), "Couldn't stop event set.");
   printf("Time: %lf\n", omp_get_wtime() - now);
   // END WORK
