@@ -12,23 +12,6 @@ unsigned long omp_get_tid_wrapper(void) {
   return (unsigned long)omp_get_thread_num();
 }
 
-long long **alloc_values(size_t num_threads, size_t num_events) {
-  long long **values = malloc(num_threads * sizeof(long long *));
-  for (int tid = 0; tid < num_threads; tid++) {
-    values[tid] = malloc(num_events * sizeof(long long));
-    for (int eid = 0; eid < num_events; eid++)
-      values[tid][eid] = 0;
-  }
-  return values;
-}
-
-void free_values(long long **values, size_t num_threads) {
-  for (size_t tid = 0; tid < num_threads; tid++) {
-    free(values[tid]);
-  }
-  free(values);
-}
-
 int main(int argc, char *argv[]) {
   double a[N], b[N], c[N];
   int retval;
@@ -36,6 +19,13 @@ int main(int argc, char *argv[]) {
   int num_threads = omp_get_max_threads();
   long long **values = alloc_values(num_threads, NUM_EVENTS);
   printf("Start: %s (num_threads: %d)\n", argv[0], num_threads);
+#pragma omp parallel for
+  for (int i = 0; i < N; i++) {
+    a[i] = (i + 3) % 11;
+    b[i] = (3 * i + 2) % 29;
+    c[i] = (5 * i + 1) % 13;
+  }
+
   retval = PAPI_library_init(PAPI_VER_CURRENT);
   if (retval != PAPI_VER_CURRENT) {
     fprintf(stderr, "PAPI library init error!\n");
@@ -47,13 +37,6 @@ int main(int argc, char *argv[]) {
     chk(PAPI_query_event(native), "zero not an event!");
   }
   chk(PAPI_thread_init(omp_get_tid_wrapper), "PAPI_thread_init() failed.\n");
-
-#pragma omp parallel for
-  for (int i = 0; i < N; i++) {
-    a[i] = (i + 3) % 11;
-    b[i] = (3 * i + 2) % 29;
-    c[i] = (5 * i + 1) % 13;
-  }
 
   // BEGIN WORK
   double now = omp_get_wtime();
@@ -85,24 +68,20 @@ int main(int argc, char *argv[]) {
   printf("Time: %lf\n", omp_get_wtime() - now);
   // END WORK
 
+  for (int eid = 0; eid < NUM_EVENTS; eid++) {
+    long long total_values = 0;
+    for (int tid = 0; tid < num_threads; tid++) {
+      total_values += values[tid][eid];
+    }
+    printf("%s: %lld\n", event_str[eid], total_values);
+  }
+
   double sum = 0;
   for (int i = 0; i < N; i++) {
     sum += a[i];
   }
-
-  long long total_values[NUM_EVENTS];
-  for (int eid = 0; eid < NUM_EVENTS; eid++) {
-    total_values[eid] = 0;
-    for (int tid = 0; tid < num_threads; tid++) {
-      total_values[eid] += values[tid][eid];
-    }
-  }
-  for (int eid = 0; eid < NUM_EVENTS; eid++) {
-    printf("%s: %lld\n", event_str[eid], total_values[eid]);
-  }
   printf("result: %f\n", sum);
 
   free_values(values, num_threads);
-  printf("DONE!\n\n");
   return 0;
 }

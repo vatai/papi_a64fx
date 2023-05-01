@@ -3,6 +3,10 @@
 
 void handle_error(int retval);
 
+long long **alloc_values(size_t num_threads, size_t num_events);
+
+void free_values(long long **values, size_t num_threads);
+
 #define chk(X, msg)                                                            \
   {                                                                            \
     retval = X;                                                                \
