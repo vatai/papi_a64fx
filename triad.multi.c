@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
     for (int eid = 0; eid < NUM_EVENTS; eid++) {
       long long val = values[tid][eid];
       if (tid < 2)
-        printf("counter[%d]: %lld\n", i, val);
+        printf("values[%d][%d]: %lld\n", tid, eid, val);
       total_values += val;
     }
   }
