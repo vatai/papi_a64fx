@@ -73,7 +73,8 @@ int main(int argc, char *argv[]) {
 
   long long total_values = 0;
   for (int i = 0; i < num_threads; i++) {
-    printf("counter[%d]: %lld\n", i, values[i]);
+    if (i < 4)
+      printf("counter[%d]: %lld\n", i, values[i]);
     total_values += values[i];
   }
   printf("total_counter: %lld\n", total_values);
