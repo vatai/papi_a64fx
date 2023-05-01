@@ -22,7 +22,7 @@ long long **alloc_values(size_t num_threads, size_t num_events) {
   return values;
 }
 
-void free_values(size_t tid) {
+void free_values(long long **values, size_t num_threads) {
   for (size_t tid = 0; tid < num_threads; tid++) {
     free(values[tid]);
     free(values);
@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
   printf("total_counter: %lld\n", total_values);
   printf("result: %f\n", sum);
 
-  free_values(num_threads);
+  free_values(values, num_threads);
   printf("DONE!\n\n");
   return 0;
 }
