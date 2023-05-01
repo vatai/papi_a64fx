@@ -1,5 +1,6 @@
 CC=fcc
-CFLAGS=-Kopenmp -Kfast -Koptmsg=2
+CFLAGS=-Kopenmp -Kfast
+#-Koptmsg=2
 
 # CC=clang
 # CFLAGS=-O2 -fopenmp
