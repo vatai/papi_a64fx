@@ -85,10 +85,13 @@ int main(int argc, char *argv[]) {
   }
 
   long long total_values = 0;
-  for (int i = 0; i < num_threads; i++) {
-    if (i < 4)
-      printf("counter[%d]: %lld\n", i, values[i]);
-    total_values += values[i];
+  for (int tid = 0; tid < num_threads; tid++) {
+    for (int eid = 0; eid < NUM_EVENTS; eid++) {
+      long long val = values[tid][eid];
+      if (tid < 2)
+        printf("counter[%d]: %lld\n", i, val);
+      total_values += val;
+    }
   }
   printf("total_counter: %lld\n", total_values);
   printf("result: %f\n", sum);
