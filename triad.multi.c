@@ -8,7 +8,7 @@
 #include "config.h"
 #include "handle_error.h"
 
-unsigned long omp_get_thread_num_wrapper(void) {
+unsigned long omp_get_tid_wrapper(void) {
   return (unsigned long)omp_get_thread_num();
 }
 
@@ -41,13 +41,12 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "PAPI library init error!\n");
     exit(1);
   }
-  for (int eid = 0; eid < NUM_EVENTS; eid++)
+  for (int eid = 0; eid < NUM_EVENTS; eid++) {
     chk(PAPI_event_name_to_code(event_str[eid], &native),
         "name to code failed");
-  chk(PAPI_query_event(native), "zero not an event!");
-
-  chk(PAPI_thread_init(omp_get_thread_num_wrapper),
-      "PAPI_thread_init() failed.\n");
+    chk(PAPI_query_event(native), "zero not an event!");
+  }
+  chk(PAPI_thread_init(omp_get_tid_wrapper), "PAPI_thread_init() failed.\n");
 
 #pragma omp parallel for
   for (int i = 0; i < N; i++) {
@@ -62,7 +61,7 @@ int main(int argc, char *argv[]) {
   long long *cntvct = malloc(num_threads * sizeof(long long));
 #pragma omp parallel
   {
-    int tid = omp_get_thread_num_wrapper();
+    int tid = omp_get_tid_wrapper();
     event_set[tid] = PAPI_NULL;
     chk(PAPI_create_eventset(&event_set[tid]), "Couldn't create eventset.");
     for (int eid = 0; eid < NUM_EVENTS; eid++)
@@ -79,7 +78,7 @@ int main(int argc, char *argv[]) {
   // usleep(1000000);
 #pragma omp parallel
   {
-    int tid = omp_get_thread_num_wrapper();
+    int tid = omp_get_tid_wrapper();
     cntvct[tid] = PAPI_get_virt_cyc();
     chk(PAPI_stop(event_set[tid], values[tid]), "Couldn't stop event set.");
   }
