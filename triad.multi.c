@@ -59,8 +59,8 @@ int main(int argc, char *argv[]) {
   usleep(1000000);
 #pragma omp parallel
   {
-    cntvct[tid] = PAPI_get_virt_cyc();
     int tid = omp_get_thread_num_wrapper();
+    cntvct[tid] = PAPI_get_virt_cyc();
     chk(PAPI_stop(event_set[tid], &values[tid]), "Couldn't stop event set.");
   }
   printf("Time: %lf\n", omp_get_wtime() - now);
