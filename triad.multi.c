@@ -98,7 +98,7 @@ int main(int argc, char *argv[]) {
     }
   }
   for (int eid = 0; eid < NUM_EVENTS; eid++) {
-    printf("%s: %lld\n", event_str[eid], total_values);
+    printf("%s: %lld\n", event_str[eid], total_values[eid]);
   }
   printf("result: %f\n", sum);
 
