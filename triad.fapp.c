@@ -32,15 +32,15 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < N; i++) {
     a[i] = a[i] * b[i] + c[i];
   }
-  double sum = 0;
-  for (int i = 0; i < N; i++) {
-    sum += a[i];
-  }
-  printf("result: %f\n", sum);
   // STOP begin
   fapp_stop("roi", 1, 0);
   // STOP end
 
   printf("Time: %lf\n", omp_get_wtime() - now);
+  double sum = 0;
+  for (int i = 0; i < N; i++) {
+    sum += a[i];
+  }
+  printf("result: %f\n", sum);
   return 0;
 }
