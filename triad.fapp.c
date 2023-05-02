@@ -37,6 +37,5 @@ int main(int argc, char *argv[]) {
   printf("result: %f\n", sum);
 
   printf("Time: %lf\n", omp_get_wtime() - now);
-  free_values(values, num_threads);
   return 0;
 }
