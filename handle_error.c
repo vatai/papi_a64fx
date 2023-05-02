@@ -27,11 +27,11 @@ void free_values(long long **values, size_t num_threads) {
 void formula(long long **values, long long *cntvct, size_t num_threads,
              size_t num_events) {
   long long veclen = 512;
-  long long cntfrq = 100000000;
+  double cntfrq = 100000000;
   for (size_t tid = 0; tid < num_threads; tid++) {
     long long *val = values[tid];
-    double numer = val[0] * veclen + val[1];
-    double denum = cntvct[tid] / cntfrq;
+    double numer = double(val[0]) * veclen + val[1];
+    double denum = double(cntvct[tid]) / cntfrq;
     printf("numer: %llf; denum: %llf; ", numer, denum);
     double result_tid = numer / (long long)(1e9) / denum;
     printf("%10lld; ", cntvct[tid]);
