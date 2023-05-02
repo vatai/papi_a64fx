@@ -49,17 +49,17 @@ int main(int argc, char *argv[]) {
           "Couldn't add event.");
     chk(PAPI_start(event_set[tid]), "Coulnd't start event set.");
     cntvct[tid] = PAPI_get_virt_cyc();
-  }
+    // }
 
-#pragma omp parallel for
-  for (int i = 0; i < N; i++) {
-    a[i] = a[i] * b[i] + c[i];
-  }
+#pragma omp for
+    for (int i = 0; i < N; i++) {
+      a[i] = a[i] * b[i] + c[i];
+    }
 
-  long long **values = alloc_values(num_threads, NUM_EVENTS);
-#pragma omp parallel
-  {
-    int tid = omp_get_tid_wrapper();
+    long long **values = alloc_values(num_threads, NUM_EVENTS);
+    // #pragma omp parallel
+    // {
+    // int tid = omp_get_tid_wrapper();
     cntvct[tid] = PAPI_get_virt_cyc() - cntvct[tid];
     chk(PAPI_stop(event_set[tid], values[tid]), "Couldn't stop event set.");
   }
