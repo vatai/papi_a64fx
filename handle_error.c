@@ -33,7 +33,7 @@ void formula(long long **values, long long *cntvct, size_t num_threads,
     double numer = val[0] * veclen + val[1];
     double denum = cntvct[tid] / cntfrq;
     double result_tid = numer / 1e9 / denum;
-    printf("%8lld; ", cntvct[tid]);
+    printf("%10lld; ", cntvct[tid]);
     for (size_t eid = 0; eid < num_events; eid++) {
       printf("%8lld; ", val[eid]);
     }
