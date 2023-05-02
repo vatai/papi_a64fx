@@ -1,6 +1,9 @@
 #!/usr/bin/bash -e
 
 make -B
-rm -rf rep1
-fapp -C -d rep1 -Icpupa -Hevent=pa1 ./triad.fapp
-fapp -A -d rep1 -Icpupa -tcsv -o pa1.csv
+rm -rf tmp
+mkdir tmp
+for i in $(seq 1); do
+  fapp -C -d tmp/rep${i} -Icpupa -Hevent=pa${i} ./triad.fapp
+  fapp -A -d tmp/rep${i} -Icpupa -tcsv -o pa${i}.csv
+done
