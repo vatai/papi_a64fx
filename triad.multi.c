@@ -14,31 +14,28 @@ unsigned long omp_get_tid_wrapper(void) {
 
 int main(int argc, char *argv[]) {
   double a[N], b[N], c[N];
-  int retval;
-  int native = 0x0;
-  int num_threads = omp_get_max_threads();
-  long long **values = alloc_values(num_threads, NUM_EVENTS);
-  printf("Start: %s (num_threads: %d)\n", argv[0], num_threads);
 #pragma omp parallel for
   for (int i = 0; i < N; i++) {
     a[i] = (i + 3) % 11;
     b[i] = (3 * i + 2) % 29;
     c[i] = (5 * i + 1) % 13;
   }
+  int num_threads = omp_get_max_threads();
+  printf("Start: %s (num_threads: %d)\n", argv[0], num_threads);
 
+  int retval;
   retval = PAPI_library_init(PAPI_VER_CURRENT);
   if (retval != PAPI_VER_CURRENT) {
     fprintf(stderr, "PAPI library init error!\n");
     exit(1);
   }
   for (int eid = 0; eid < NUM_EVENTS; eid++) {
+    int native = 0x0;
     chk(PAPI_event_name_to_code(event_str[eid], &native),
         "name to code failed");
     chk(PAPI_query_event(native), "zero not an event!");
   }
   chk(PAPI_thread_init(omp_get_tid_wrapper), "PAPI_thread_init() failed.\n");
-
-  // BEGIN WORK
   double now = omp_get_wtime();
   int *event_set = malloc(num_threads * sizeof(int));
   long long *cntvct = malloc(num_threads * sizeof(long long));
@@ -53,12 +50,13 @@ int main(int argc, char *argv[]) {
     chk(PAPI_start(event_set[tid]), "Coulnd't start event set.");
     cntvct[tid] = PAPI_get_virt_cyc();
   }
-  // usleep(1000000);
+
 #pragma omp parallel for
   for (int i = 0; i < N; i++) {
     a[i] = a[i] * b[i] + c[i];
   }
-  // usleep(1000000);
+
+  long long **values = alloc_values(num_threads, NUM_EVENTS);
 #pragma omp parallel
   {
     int tid = omp_get_tid_wrapper();
@@ -66,8 +64,6 @@ int main(int argc, char *argv[]) {
     chk(PAPI_stop(event_set[tid], values[tid]), "Couldn't stop event set.");
   }
   printf("Time: %lf\n", omp_get_wtime() - now);
-  // END WORK
-
   for (int eid = 0; eid < NUM_EVENTS; eid++) {
     long long total_values = 0;
     for (int tid = 0; tid < num_threads; tid++) {
@@ -75,13 +71,11 @@ int main(int argc, char *argv[]) {
     }
     printf("%s: %lld\n", event_str[eid], total_values);
   }
-
   double sum = 0;
   for (int i = 0; i < N; i++) {
     sum += a[i];
   }
   printf("result: %f\n", sum);
-
   free_values(values, num_threads);
   return 0;
 }
