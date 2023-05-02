@@ -39,6 +39,7 @@ int main(int argc, char *argv[]) {
   double now = omp_get_wtime();
   int *event_set = malloc(num_threads * sizeof(int));
   long long *cntvct = malloc(num_threads * sizeof(long long));
+  long long **values = alloc_values(num_threads, NUM_EVENTS);
 #pragma omp parallel
   {
     int tid = omp_get_tid_wrapper();
@@ -56,7 +57,6 @@ int main(int argc, char *argv[]) {
       a[i] = a[i] * b[i] + c[i];
     }
 
-    long long **values = alloc_values(num_threads, NUM_EVENTS);
     // #pragma omp parallel
     // {
     // int tid = omp_get_tid_wrapper();
