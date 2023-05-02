@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     c[i] = (5 * i + 1) % 13;
   }
   int num_threads = omp_get_max_threads();
-  printf("Start: %s (num_threads: %d)\n", argv[0], num_threads);
+  printf("Start (fapp): %s (num_threads: %d)\n", argv[0], num_threads);
 
   double now = omp_get_wtime();
   // begin
