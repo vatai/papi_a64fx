@@ -76,6 +76,8 @@ int main(int argc, char *argv[]) {
     }
     printf("%s: %lld\n", event_str[eid], total_values);
   }
+
   free_values(values, num_threads);
+  free(cntvct);
   return 0;
 }
