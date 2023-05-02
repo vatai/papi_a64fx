@@ -44,6 +44,12 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < N; i++) {
     a[i] = a[i] * b[i] + c[i];
   }
+  double sum = 0;
+  for (int i = 0; i < N; i++) {
+    sum += a[i];
+  }
+  printf("result: %f\n", sum);
+
   cntvct = PAPI_get_virt_cyc() - cntvct;
   chk(PAPI_stop(event_set, values[0]), "Couldn't stop event set.");
   printf("Time: %lf\n", omp_get_wtime() - now);
@@ -52,12 +58,6 @@ int main(int argc, char *argv[]) {
   for (int eid = 0; eid < NUM_EVENTS; eid++) {
     printf("%s: %lld\n", event_str[eid], values[0][eid]);
   }
-
-  double sum = 0;
-  for (int i = 0; i < N; i++) {
-    sum += a[i];
-  }
-  printf("result: %f\n", sum);
 
   free_values(values, num_threads);
   return 0;

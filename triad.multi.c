@@ -55,6 +55,11 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < N; i++) {
     a[i] = a[i] * b[i] + c[i];
   }
+  double sum = 0;
+  for (int i = 0; i < N; i++) {
+    sum += a[i];
+  }
+  printf("result: %f\n", sum);
 
   long long **values = alloc_values(num_threads, NUM_EVENTS);
 #pragma omp parallel
@@ -71,11 +76,6 @@ int main(int argc, char *argv[]) {
     }
     printf("%s: %lld\n", event_str[eid], total_values);
   }
-  double sum = 0;
-  for (int i = 0; i < N; i++) {
-    sum += a[i];
-  }
-  printf("result: %f\n", sum);
   free_values(values, num_threads);
   return 0;
 }
