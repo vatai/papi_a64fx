@@ -38,6 +38,6 @@ void formula(long long **values, long long *cntvct, size_t num_threads,
     for (size_t eid = 0; eid < num_events; eid++) {
       printf("v[%d]: %6lld; ", eid, val[eid]);
     }
-    printf("GFLOPS(%d): %llf %lld\n", tid, gflops, val[0]);
+    printf("GFLOPS(%d): %f %lld\n", tid, gflops, val[0]);
   }
 }
