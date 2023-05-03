@@ -33,11 +33,11 @@ void formula(long long **values, long long *cntvct, size_t num_threads,
     double numer = (double)(val[0]) * veclen + val[1];
     double denum = (double)(cntvct[tid]) / cntfrq;
     printf("numer: %llf; denum: %llf; ", numer, denum);
-    double result_tid = numer / (long long)(1e9) / denum;
+    double gflops = val[0]; // numer / (long long)(1e9) / denum;
     printf("%10lld; ", cntvct[tid]);
     for (size_t eid = 0; eid < num_events; eid++) {
       printf("%8lld; ", val[eid]);
     }
-    printf("GFLOPS(%d): %llf\n", tid, result_tid);
+    printf("GFLOPS(%d): %llf\n", tid, gflops);
   }
 }
