@@ -36,8 +36,8 @@ void formula(long long **values, long long *cntvct, size_t num_threads,
     double gflops = (double)val[0]; // numer / (long long)(1e9) / denum;
     printf("cntvct: %10lld; ", cntvct[tid]);
     for (size_t eid = 0; eid < num_events; eid++) {
-      printf("v[%d]: %8lld; ", eid, val[eid]);
+      printf("v[%d]: %6lld; ", eid, val[eid]);
     }
-    printf("GFLOPS(%d): %llf\n", tid, gflops);
+    printf("GFLOPS(%d): %llf %llf\n", tid, gflops, (double)val[0]);
   }
 }
