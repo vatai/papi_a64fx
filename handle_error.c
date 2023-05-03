@@ -30,10 +30,9 @@ void formula(long long **values, long long *cntvct, size_t num_threads,
   double cntfrq = (double)(100000000);
   for (size_t tid = 0; tid < num_threads; tid++) {
     long long *val = values[tid];
-    double numer = (double)(val[0]) * veclen + val[1];
-    double denum = (double)(cntvct[tid]) / cntfrq;
-    printf("numer: %llf; denum: %llf; ", numer, denum);
-    double gflops = (double)val[0]; // numer / (long long)(1e9) / denum;
+    double numer = val[0] * veclen + val[1];
+    double denum = cntvct[tid] / cntfrq;
+    double gflops = numer / (long long)(1e9) / denum;
     printf("cntvct: %10lld; ", cntvct[tid]);
     for (size_t eid = 0; eid < num_events; eid++) {
       printf("v[%d]: %6lld; ", eid, val[eid]);
