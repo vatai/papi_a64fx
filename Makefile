@@ -1,5 +1,5 @@
 CC=fcc
-CFLAGS=-Kfast -Kopenmp 
+CFLAGS=-Kfast -Kopenmp -Wall
 #-Koptmsg=2
 
 # CC=clang
