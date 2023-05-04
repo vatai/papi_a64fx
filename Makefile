@@ -1,10 +1,11 @@
 CC=fcc
-CFLAGS=-Kfast -Kopenmp
+CFLAGS=-Kfast -Kopenmp -Ideps/papi/opt/include
 #-Koptmsg=2
 
 # CC=clang
 # CFLAGS=-O2 -fopenmp
 
+LDFLAGS=-Ldeps/papi/opt/lib
 LDLIBS=-lpapi -fopenmp
 
 all: triad triad.multi triad.fapp
