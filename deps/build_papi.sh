@@ -11,7 +11,7 @@ PREFIX=$(pwd)/opt
 rm -rf build
 mkdir build
 cd build
-../configure --prefix=$PREFIX
+../src/configure --prefix=$PREFIX
 make -j
 make install
 
