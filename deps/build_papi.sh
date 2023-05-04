@@ -9,8 +9,13 @@ pushd papi
 
 PREFIX=$(pwd)/opt
 git checkout papi-7-0-1-t
-./src/configure --prefix=$PREFIX
+
+pushd src
+
+./configure --prefix=$PREFIX
 make -j
 make install
+
+popd
 
 popd
