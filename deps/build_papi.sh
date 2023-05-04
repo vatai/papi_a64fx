@@ -8,6 +8,7 @@
 pushd papi
 
 PREFIX=$(pwd)/opt
+git checkout papi-7-0-1-t
 rm -rf build
 mkdir build
 cd build
