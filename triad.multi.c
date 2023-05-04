@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
       chk(PAPI_add_named_event(event_set[tid], event_str[eid]),
           "Couldn't add event.");
     chk(PAPI_start(event_set[tid]), "Coulnd't start event set.");
-    cntvct[tid] = PAPI_get_virt_cyc();
+    cntvct[tid] = PAPI_get_real_cyc();
   }
 
 #pragma omp parallel for
@@ -60,7 +60,7 @@ int main(int argc, char *argv[]) {
 #pragma omp parallel
   {
     int tid = omp_get_tid_wrapper();
-    cntvct[tid] = PAPI_get_virt_cyc() - cntvct[tid];
+    cntvct[tid] = PAPI_get_real_cyc() - cntvct[tid];
     chk(PAPI_stop(event_set[tid], values[tid]), "Couldn't stop event set.");
   }
   printf("Time: %lf\n", omp_get_wtime() - now);
