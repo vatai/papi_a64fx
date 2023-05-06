@@ -1,6 +1,8 @@
+#include <linux/prctl.h>
 #include <papi.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/prctl.h>
 
 void handle_error(int retval) {
   printf("PAPI error %d: %s\n", retval, PAPI_strerror(retval));
@@ -26,7 +28,8 @@ void free_values(long long **values, size_t num_threads) {
 
 void formula(long long **values, long long *cntvct, size_t num_threads,
              size_t num_events) {
-  long long veclen = 512;
+  long long veclen = prctl(PR_SVE_GET_VL);
+  printf("veclen: %d\n" veclen);
   double cntfrq = (double)(100000000);
   for (size_t tid = 0; tid < num_threads; tid++) {
     long long *val = values[tid];
