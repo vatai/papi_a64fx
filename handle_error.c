@@ -29,7 +29,7 @@ void free_values(long long **values, size_t num_threads) {
 void formula(long long **values, long long *cntvct, size_t num_threads,
              size_t num_events) {
   long long veclen = prctl(PR_SVE_GET_VL);
-  printf("veclen: %d\n" veclen);
+  printf("veclen: %d\n", veclen);
   double cntfrq = (double)(100000000);
   for (size_t tid = 0; tid < num_threads; tid++) {
     long long *val = values[tid];
