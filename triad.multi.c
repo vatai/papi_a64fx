@@ -32,6 +32,7 @@ int main(int argc, char *argv[]) {
       "L2D_SWAP_DM",          // 0x0325 4
       "L2D_CACHE_MIBMCH_PRF", // 0x0326 5
   };
+#define NUM_EVENTS (sizeof(event_str) / sizeof(*event_str))
   int retval;
   retval = PAPI_library_init(PAPI_VER_CURRENT);
   if (retval != PAPI_VER_CURRENT) {
