@@ -5,7 +5,7 @@ CFLAGS=-Kfast -Kopenmp -Ideps/papi/opt/include
 # CC=clang
 # CFLAGS=-O2 -fopenmp
 
-LDFLAGS=-Ldeps/papi/opt/lib
+# LDFLAGS=-Ldeps/papi/opt/lib
 LDLIBS=-lpapi -fopenmp
 
 all: triad triad.multi triad.fapp
