@@ -24,14 +24,6 @@ int main(int argc, char *argv[]) {
   int num_threads = omp_get_max_threads();
   printf("Start: %s (num_threads: %d)\n", argv[0], num_threads);
 
-  char event_str[][PAPI_MAX_STR_LEN] = {
-      "FP_SCALE_OPS_SPEC",    // 0x80c0 0
-      "FP_FIXED_OPS_SPEC",    // 0x80c1 1
-      "L2D_CACHE_REFILL",     // 0x0017 2
-      "L2D_CACHE_WB",         // 0x0018 3
-      "L2D_SWAP_DM",          // 0x0325 4
-      "L2D_CACHE_MIBMCH_PRF", // 0x0326 5
-  };
   int retval;
   retval = PAPI_library_init(PAPI_VER_CURRENT);
   if (retval != PAPI_VER_CURRENT) {
