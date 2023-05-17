@@ -1,5 +1,5 @@
 CC=fcc
-CFLAGS=-Kfast -Kopenmp -Ideps/papi/opt/include
+CFLAGS=-Kfast -Kopenmp # -Ideps/papi/opt/include
 #-Koptmsg=2
 
 # CC=clang
