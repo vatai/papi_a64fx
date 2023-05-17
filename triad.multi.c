@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
   int retval;
   retval = PAPI_library_init(PAPI_VER_CURRENT);
   if (retval != PAPI_VER_CURRENT) {
-    fprintf(stderr, "PAPI library init error!\n");
+    fprintf(stderr, "PAPI library init error %x!\n", PAPI_VER_CURRENT);
     exit(1);
   }
   for (int eid = 0; eid < NUM_EVENTS; eid++) {
