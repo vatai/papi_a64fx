@@ -62,6 +62,7 @@ int main(int argc, char *argv[]) {
     chk(PAPI_stop(event_set[tid], values[tid]), "Couldn't stop event set.");
   }
   printf("Time: %lf\n", omp_get_wtime() - now);
+  // sum up counters for all threads
   for (int eid = 0; eid < NUM_EVENTS; eid++) {
     long long total_values = 0;
     for (int tid = 0; tid < num_threads; tid++) {
@@ -69,11 +70,11 @@ int main(int argc, char *argv[]) {
     }
     printf("%s: %lld\n", event_str[eid], total_values);
   }
-  long long veclen = prctl(PR_SVE_GET_VL);
+  // xls veclen bits (not bytes)="<<3"; "/128"=">>7"; total=">> 4"
+  int veclen = (prctl(PR_SVE_GET_VL) & PR_SVE_VL_LEN_MASK) >> 4;
   for (size_t tid = 0; tid < num_threads; tid++) {
-    long long *val = values[tid];
-    double numer = val[0] * veclen + val[1];
-    double gflops = numer / (long long)(1e9);
+    double flops = values[tid][0] * veclen + values[tid][1];
+    double gflops = flops / (long long)(1e9);
   }
   free_values(values, num_threads);
   double sum = 0;
