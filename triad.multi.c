@@ -75,6 +75,9 @@ int main(int argc, char *argv[]) {
   for (size_t tid = 0; tid < num_threads; tid++) {
     double flops = values[tid][0] * veclen + values[tid][1];
     double gflops = flops / (long long)(1e9);
+    double tp =
+        values[tid][2] + values[tid][3] - values[tid][4] - values[tid][5];
+    double gtp = tp * 256 / 1e9;
   }
   free_values(values, num_threads);
   double sum = 0;

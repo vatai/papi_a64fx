@@ -27,8 +27,8 @@ char event_str[][PAPI_MAX_STR_LEN] = {
     "L2D_CACHE_MIBMCH_PRF", // 0x0326 5
     "EA_CORE",              // 0x01e0 6
     "EA_L2",                // 0x03e0 7
-    "EA_MEMORY",            // 0x03e8 8
 };
+// "EA_MEMORY",            // 0x03e8 8
 #define NUM_EVENTS (sizeof(event_str) / sizeof(*event_str))
 
 #endif // _HANDLE_ERROR_H_
