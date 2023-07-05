@@ -9,6 +9,6 @@ CFLAGS=-Kfast -Kopenmp # -Ideps/papi/opt/include
 LDLIBS=-lpapi -fopenmp
 
 all: triad triad.multi triad.fapp
-triad: triad.o handle_error.o
-triad.multi: triad.multi.o handle_error.o
-triad.fapp: triad.fapp.o handle_error.o
+triad: triad.o common.o
+triad.multi: triad.multi.o common.o
+triad.fapp: triad.fapp.o common.o
