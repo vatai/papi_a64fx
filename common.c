@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "handle_error.h"
+#include "common.h"
 
 void setup_workload(struct workload_t *workload, size_t num_elements) {
   workload->num_elements = num_elements;

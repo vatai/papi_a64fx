@@ -5,9 +5,9 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "common.h"
 #include "config.h"
 #include "fj_tool/fapp.h"
-#include "handle_error.h"
 
 unsigned long omp_get_tid_wrapper(void) {
   return (unsigned long)omp_get_thread_num();

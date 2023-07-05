@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "common.h"
 #include "config.h"
-#include "handle_error.h"
 
 int main(int argc, char *argv[]) {
   struct workload_t workload;
